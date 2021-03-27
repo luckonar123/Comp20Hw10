@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+	<title>HW10 Lucas K</title>
+	<meta charset="utf-8"/>
+	<script>
+		function getFox() {
+			/* Step 1: Make instance of request object...
+			...to make HTTP request after page is loaded*/
+			request = new XMLHttpRequest();
+			console.log("1 - request object created");
+ 
+			// Step 2: Set the URL for the AJAX request to be the JSON file
+ 
+		request.open("GET", "https://randomfox.ca/floof/", true)
+
+			console.log("2 - opened request file");
+ 
+			// Step 3: set up event handler/callback
+
+			request.onreadystatechange = function() {
+				 
+				if (request.readyState == 4 && request.status == 200) {
+
+					// Step 5: wait for done + success
+
+					console.log("5 - response received");
+					result = request.responseText;
+                    jpg = JSON.parse(result);
+					//alert(result);
+					document.getElementById("data").innerHTML = result;
+                    img = JSON.stringify(jpg.image)
+                    img = img.replace(/^"(.*)"$/, '$1');
+                    document.getElementById("fox").src = img; 
+
+				}
+				else if (request.readyState == 4 && request.status != 200) {
+
+					document.getElementById("data").innerHTML = "Something is wrong!  Check the logs to see where this went off the rails";
+
+				}
+
+				else if (request.readyState == 3) {
+
+					document.getElementById("data").innerHTML = "Too soon!  Try again";
+
+				}
+
+			}
+		// Step 4: fire off the HTTP request
+			request.send();
+			console.log("4 - Request sent");
+		}
+	</script>
+</head>
+
+
+<body onload="getFox()">
+
+	<h1>Random Fox!</h1>
+    <p>This API gives users random pictures of foxes! I found it on the list of public API's on Github
+    I used the get request to get the json, then I used parse to take the image URL
+    from it. so every time you refreh the page, a new fox comes in!
+    These images can be used by any animal related company in need of fox images! Such as
+    adoption places, etc.</p>
+    
+    
+    
+	<div id="data"> Loading... </div>
+    <img id="fox" src=img>
+
+    
+</body>
+</html>
